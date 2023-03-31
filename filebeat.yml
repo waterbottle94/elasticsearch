@@ -1,0 +1,33 @@
+setup.kibana:
+  host: "localhost:5601"
+
+output.elasticsearch:
+  hosts: ["https://localhost:9200"]
+
+  # Protocol - either `http` (default) or `https`.
+  protocol: "https"
+
+  username: "elastic"
+  password: "pass@123"
+
+  ssl.certificate_authorities: "ca.crt"
+  ssl.verificationMode: none
+
+filebeat.inputs:
+- type: log
+  paths:
+    - /var/log/apache2/*.log
+    - /usr/share/filebeat/data/apache2.logs
+
+filebeat.modules:
+- module: apache2
+  access:
+    enabled: true
+    var.paths: ["/var/log/apache2/access.log"]
+  error:
+    enabled: true
+    var.paths: ["/var/log/apache2/error.log"]
+
+output.logstash:
+  hosts: ["localhost:5601"]
+
